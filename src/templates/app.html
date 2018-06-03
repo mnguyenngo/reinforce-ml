@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Reinforce ML Concepts</title>
+    <meta name="description" content="Reinforce ML Concepts">
+    <meta name="author" content="Nguyen Ngo">
+    <!-- load the jquery.js before the js for the app -->
+    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='js/bootstrap.min.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}>  </script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}"> -->
+
+  </head>
+
+  <body>
+
+    <h2 id="title-text"><a href="/">Reinforce ML</a><sup><span class="badge badge-secondary" style="font-size:12px">beta</span></sup></h2>
+
+    <span id="description-text">Daily workouts to reinforce machine learning concepts</span>
+
+    <ul>
+      {% for key, row in data.items() %}
+        <li>
+          <a href={{ baseurl + row['href'] }}>
+            {{ row['title'] }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+
+
+    <div class="input-group" id="user-submission">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Your definition</span>
+      </div>
+      <textarea class="form-control" aria-label="With textarea" id="user-submission" name="user-submission" rows="4" cols="50" placeholder="Enter your definition here" wrap="soft"></textarea>
+    </div>
+
+    <div id="submit-button">
+      <button type="button" class="btn btn-primary" id="submit">SUBMIT</button>
+    </div>
+
+    <div>
+      <div id="show-user-submission"></div>
+      <div class="container">
+        <div class="row">
+          <div id="results"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
