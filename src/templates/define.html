@@ -18,23 +18,22 @@
 
   <body>
 
-    <h2 id="title-text"><a href="/">Reinforce ML</a></h2>
 
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="/"><h4 id="title-text">Reinforce ML</h4></a>
+    </nav>
 
     <div class="container">
 
       <div class="row">
         <div class="col-12">
-          <h4 id="prompt">Define "<span id="word">{{ word }}</span>"</h4>
+          <h4 id="centered">Define "<span id="word">{{ word }}</span>"</h4>
         </div>
       </div>
 
       <div class="row">
         <div class="col-12">
           <div class="input-group" id="user-submission">
-            <!-- <div class="input-group-prepend"> -->
-              <!-- <span class="input-group-text">Your definition</span> -->
-            <!-- </div> -->
             <textarea class="form-control" aria-label="With textarea" id="user-submission" name="user-submission" rows="4" cols="50" placeholder="Enter your definition here" wrap="soft"></textarea>
           </div>
         </div>
@@ -44,6 +43,9 @@
 
         <div class="col-12" id="submit-button">
           <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">SUBMIT</button>
+        </div>
+        <div class="col-12">
+          <a href="{{ url }}" id="centered">See answer</a>
         </div>
       </div>
 

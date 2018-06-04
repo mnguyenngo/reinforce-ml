@@ -18,19 +18,38 @@
 
   <body>
 
-    <h2 id="title-text"><a href="/">Reinforce ML</a></h2>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="/"><h4 id="title-text">Reinforce ML</h4></a>
+    </nav>
 
-    <span id="description-text">Daily workouts to reinforce machine learning concepts</span>
+    <div class="container">
+      <div class="row">
+        <h4 id="description-text centered">Daily workouts to reinforce machine learning concepts</h4>
+      </div>
 
-    <ul>
-      {% for title in data %}
-        <li>
-          <a href="/define/{{ title }}">
-            {{ title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+      <div class="row">
+        {% for sec in data %}
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card">
+              <div class="card-header">
+                {{ sec }}
+              </div>
+              <div class="card-body">
+                <ul>
+                  {% for title in data[sec] %}
+                    <li>
+                      <a href="/define/{{ title }}">
+                        {{ title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 
   </body>
 </html>
