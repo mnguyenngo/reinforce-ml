@@ -51,7 +51,7 @@ class Scorer(object):
         # d_doc = self.get_first_sent(self.nlp(definition))
         mask = self.nlp_data['title'] == word
         d_doc = self.nlp_data.loc[mask]['nlp_doc'].values[0]
-        print(d_doc)
+        d_doc = self.get_first_sent(d_doc)
 
         d_roots = self.get_lemma_roots(d_doc)
         d_mw = self.get_mw_nc(d_doc)
@@ -61,14 +61,8 @@ class Scorer(object):
 
         # get root match score
         root_score = self.get_top_match(d_roots, u_roots)
-        print(root_score)
         # get sentence similarity score
         sent_sim = self.cos_sim(u_doc.vector, d_doc.vector)
-
-        print(u_roots)
-        print(d_roots)
-        print(d_mw)
-        print(u_mw)
 
         # get bonus multiword match score
         mw_score = self.get_top_match(d_mw, u_mw)
