@@ -23,11 +23,21 @@ class Scorer(object):
         else:
             self.nlp = spacy.load(nlp_model_name)
 
-    def load_pickle(self, path):
+    def load_raw_pickle(self, path):
         self.raw_data = pd.read_pickle(path)
 
-    def score(self, definition, user_subm):
-        """
+    def load_nlp_pickle(self, path):
+        self.nlp_data = pd.read_pickle(path)
+
+    def score(self, word, user_subm):
+        """Scores the user submission against the definition given by Wikipedia
+
+        Arguments:
+            word (str): the word that the user will attempt to define
+            user_subm (str): the definition given by the user
+
+        Return:
+            total_score (float): total calculated score
 
         Score is calculated by:
         top noun chunks that match / total num of noun chunks in the definition
@@ -38,7 +48,10 @@ class Scorer(object):
             num of multiword noun chunks that match / total num of multiword nc
         """
         u_doc = self.get_first_sent(self.nlp(user_subm))
-        d_doc = self.get_first_sent(self.nlp(definition))
+        # d_doc = self.get_first_sent(self.nlp(definition))
+        mask = self.nlp_data['title'] == word
+        d_doc = self.nlp_data.loc[mask]['nlp_doc'].values[0]
+        print(d_doc)
 
         d_roots = self.get_lemma_roots(d_doc)
         d_mw = self.get_mw_nc(d_doc)
@@ -48,9 +61,14 @@ class Scorer(object):
 
         # get root match score
         root_score = self.get_top_match(d_roots, u_roots)
-
+        print(root_score)
         # get sentence similarity score
         sent_sim = self.cos_sim(u_doc.vector, d_doc.vector)
+
+        print(u_roots)
+        print(d_roots)
+        print(d_mw)
+        print(u_mw)
 
         # get bonus multiword match score
         mw_score = self.get_top_match(d_mw, u_mw)
@@ -120,9 +138,15 @@ class Scorer(object):
             for u_item in u_list:
                 u_item = self.nlp(u_item)
                 scores.append(self.cos_sim(u_item.vector, d_item.vector))
+                scores = [score for score in scores if ~np.isnan(score)]
+                print(scores)
+            if len(scores) > 0:
+                top_scores.append(max(scores))
 
-            top_scores.append(max(scores))
-
+        print("top_scores: {}".format(top_scores))
+        print(sum(top_scores))
+        print(len(top_scores))
+        # print(sum(top_scores) / len(top_scores))
         return sum(top_scores) / len(top_scores)
 
     def cos_sim(self, a_vec, b_vec):
