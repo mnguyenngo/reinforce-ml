@@ -19,6 +19,8 @@ let send_submission_json = function(submission) {
 let display_results = function(results) {
     let user_submission = $("div#submission")
     user_submission.html(results.submission)
+    let answer = $("div#answer")
+    answer.html(results.answer)
     let score = $("div#score")
     score.html(results.score)
 };
