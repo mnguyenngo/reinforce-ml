@@ -60,12 +60,12 @@ class Scorer(object):
         u_mw = self.get_mw_nc(u_doc)
 
         # get root match score
-        root_score = self.get_top_match(d_roots, u_roots)
+        root_score, root_top_match = self.get_top_match(d_roots, u_roots)
         # get sentence similarity score
         sent_sim = self.cos_sim(u_doc.vector, d_doc.vector)
 
         # get bonus multiword match score
-        mw_score = self.get_top_match(d_mw, u_mw)
+        mw_score, mw_top_match = self.get_top_match(d_mw, u_mw)
 
         print("root score: {}".format(root_score))
         print("sentence similarity score: {}".format(sent_sim))
@@ -75,7 +75,14 @@ class Scorer(object):
 
         print("total calculated score: {}".format(total_score))
 
-        return total_score
+        score_dict = {
+            "root_words": root_top_match,
+            "sent_sim": round(sent_sim, 3),
+            "bonus": mw_top_match,
+            "total": round(total_score, 3)
+        }
+
+        return score_dict
 
     def get_first_sent(self, doc):
         sents = list(doc.sents)
@@ -123,25 +130,51 @@ class Scorer(object):
 
     def get_top_match(self, d_list, u_list):
         """Returns the scores for the matching items in two lists
-        """
-        # get root match score
-        top_scores = []
-        for d_item in d_list:
-            d_item = self.nlp(d_item)
-            scores = []
-            for u_item in u_list:
-                u_item = self.nlp(u_item)
-                scores.append(self.cos_sim(u_item.vector, d_item.vector))
-                scores = [score for score in scores if ~np.isnan(score)]
-                print(scores)
-            if len(scores) > 0:
-                top_scores.append(max(scores))
 
-        print("top_scores: {}".format(top_scores))
-        print(sum(top_scores))
-        print(len(top_scores))
-        # print(sum(top_scores) / len(top_scores))
-        return sum(top_scores) / len(top_scores)
+        Arguments:
+            d_list (list): list of words from definition
+            u_list (list): list of words from user submission
+
+        Key Variables:
+            a_list (list): shorter list of words
+            b_list (list): longer list of words
+        """
+
+        # get root match score
+        top_matches = {}
+        if len(d_list) < len(u_list):
+            a_list, b_list = d_list, u_list
+        else:
+            b_list, a_list = d_list, u_list
+
+        for a_item in a_list:
+            a_item = self.nlp(a_item)
+            scores = []
+            if len(b_list) > 0:
+                for idx, b_item in enumerate(b_list):
+                    b_item = self.nlp(b_item)
+                    scores.append(self.cos_sim(b_item.vector, a_item.vector))
+                    # replace nans with -1
+                    scores = ([score if ~np.isnan(score) else -1
+                              for score in scores])
+            if len(scores) > 0:
+                idx_of_top_match = scores.index(max(scores))
+                top_match_word = b_list.pop(idx_of_top_match)
+                top_matches[(a_item, top_match_word)] = max(scores)
+
+        if len(top_matches) > 0:
+            top_match_words = sorted(top_matches.items(), key=lambda x: x[1],
+                                     reverse=True)
+            if len(top_match_words) > 3:
+                top_match_words = top_match_words[:3]
+            top_match_words = [x[0] for x in top_match_words if x[1] > 0.75]
+            print(top_match_words)
+            top_scores = top_matches.values()
+            print(top_scores)
+            match_score = sum(top_scores) / len(top_scores)
+            return match_score, top_match_words
+        else:
+            return 0, None
 
     def cos_sim(self, a_vec, b_vec):
         """Calculates and returns the cosine similarity value

@@ -10,16 +10,26 @@ baseurl = 'https://en.wikipedia.org'
 scorer.load_nlp_pickle('../data/180603_def_nlp.pkl')
 # json_data = json.loads(scorer.nlp_data.to_json(orient='index'))
 directory = scorer.nlp_data['title'].tolist()
+section_title = scorer.nlp_data['section'].unique()
+directory_dict = {}
+for sec in section_title:
+    mask = scorer.nlp_data['section'] == sec
+    directory_dict[sec] = scorer.nlp_data[mask]['title'].values
+
+print(directory_dict)
 
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('app.html', data=directory, baseurl=baseurl)
+    return render_template('app.html', data=directory_dict)
 
 
 @app.route('/define/<word>', methods=['GET'])
 def define_page(word):
-    return render_template('define.html', word=word)
+    mask = scorer.nlp_data['title'] == word
+    href = scorer.nlp_data.loc[mask]['href'].values[0]
+    url = baseurl + href
+    return render_template('define.html', word=word, url=url)
 
 
 @app.route('/submit', methods=['POST'])
