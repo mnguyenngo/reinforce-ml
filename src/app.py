@@ -30,12 +30,23 @@ def submit():
     annotate_subm = render_text(scorer.nlp(user_submission))
     word = page_data["word"]
 
+    mask = scorer.nlp_data['title'] == word
+    definition = scorer.nlp_data.loc[mask]['nlp_doc'].values[0]
+    definition = scorer.get_first_sent(definition)
+    annotate_def = render_text(definition)
+    href = scorer.nlp_data.loc[mask]['href'].values[0]
+
+    url = baseurl + href
+
     score = scorer.score(word, user_submission)
     submission = render_template('annotate-submission.html',
                                  data=Markup(annotate_subm))
+    answer = render_template('annotate-definition.html',
+                             data=Markup(annotate_def), url=url)
     show_score = render_template('score.html', data=score)
 
     return jsonify({'submission': submission,
+                    'answer': answer,
                     'score': show_score})
 
 

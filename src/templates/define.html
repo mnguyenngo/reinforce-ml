@@ -18,31 +18,50 @@
 
   <body>
 
-    <h2 id="title-text"><a href="/">Reinforce ML</a><sup><span class="badge badge-secondary" style="font-size:12px">beta</span></sup></h2>
+    <h2 id="title-text"><a href="/">Reinforce ML</a></h2>
 
-    <h4>Define "<span id="word">{{ word }}</span>"</h4>
 
-    <div class="input-group" id="user-submission">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Your definition</span>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-12">
+          <h4 id="prompt">Define "<span id="word">{{ word }}</span>"</h4>
+        </div>
       </div>
-      <textarea class="form-control" aria-label="With textarea" id="user-submission" name="user-submission" rows="4" cols="50" placeholder="Enter your definition here" wrap="soft"></textarea>
-    </div>
 
-    <div id="submit-button">
-      <button type="button" class="btn btn-primary" id="submit">SUBMIT</button>
-    </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group" id="user-submission">
+            <!-- <div class="input-group-prepend"> -->
+              <!-- <span class="input-group-text">Your definition</span> -->
+            <!-- </div> -->
+            <textarea class="form-control" aria-label="With textarea" id="user-submission" name="user-submission" rows="4" cols="50" placeholder="Enter your definition here" wrap="soft"></textarea>
+          </div>
+        </div>
+      </div>
 
-    <div>
-      <!-- <div id="show-user-submission"></div> -->
-      <div class="container">
-        <div class="row">
+      <div class="row">
+
+        <div class="col-12" id="submit-button">
+          <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">SUBMIT</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
           <div id="submission"></div>
         </div>
-        <div class="row">
+        <div class="col-12 col-md-6">
+          <div id="answer"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
           <div id="score"></div>
         </div>
       </div>
     </div>
+
   </body>
 </html>
