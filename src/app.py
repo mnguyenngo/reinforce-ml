@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, Markup
 from scorer import Scorer
-import json
+from render_text import render_text
+# import json
 
 app = Flask(__name__)
 
@@ -26,16 +27,15 @@ def submit():
     page_data = request.json
 
     user_submission = page_data["user_subm"]
+    annotate_subm = render_text(scorer.nlp(user_submission))
     word = page_data["word"]
-    print(user_submission)
-    print(word)
 
     score = scorer.score(word, user_submission)
-    annotate_subm = render_template('annotate-submission.html',
-                                    data=user_submission)
+    submission = render_template('annotate-submission.html',
+                                 data=Markup(annotate_subm))
     show_score = render_template('score.html', data=score)
 
-    return jsonify({'submission': annotate_subm,
+    return jsonify({'submission': submission,
                     'score': show_score})
 
 

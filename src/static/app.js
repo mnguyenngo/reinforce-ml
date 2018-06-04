@@ -5,8 +5,6 @@ let get_submission = function() {
 };
 
 let send_submission_json = function(submission) {
-    console.log(submission)
-
     $.ajax({
         url: '/submit',
         contentType: "application/json; charset=utf-8",
@@ -22,7 +20,7 @@ let display_results = function(results) {
     let user_submission = $("div#submission")
     user_submission.html(results.submission)
     let score = $("div#score")
-    user_submission.html(results.score)
+    score.html(results.score)
 };
 
 $(document).ready(function() {
