@@ -25,6 +25,8 @@ let display_results = function(results) {
     score.html(results.score)
     let leaderboard = $("div#leaderboard")
     leaderboard.html(results.leaderboard)
+    let next_step = $("div#next_step")
+    next_step.html(results.next_step)
 };
 
 $(document).ready(function() {

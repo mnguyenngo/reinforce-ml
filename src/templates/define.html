@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Reinforce ML Concepts</title>
-    <meta name="description" content="Reinforce ML Concepts">
+    <title>IYOW</title>
+    <meta name="description" content="In Your Own Words">
     <meta name="author" content="Nguyen Ngo">
     <!-- load the jquery.js before the js for the app -->
     <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
@@ -14,13 +14,15 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
 
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
   </head>
 
   <body>
 
 
     <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="/"><h4 id="title-text">Reinforce ML</h4></a>
+      <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
     </nav>
 
     <div class="container">
@@ -72,7 +74,14 @@
           <div id="leaderboard"></div>
         </div>
       </div>
-    </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div id="next_step"></div>
+        </div>
+      </div>
+
+    </div> <!-- end container -->
 
   </body>
 </html>

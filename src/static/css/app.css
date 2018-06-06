@@ -1,5 +1,6 @@
 #title-text {
   padding: 10px;
+  font-family: 'Kaushan Script';
 }
 
 #description-text {
@@ -8,6 +9,12 @@
 
 #centered {
   text-align: center;
+  margin: auto;
+}
+
+#right {
+  text-align: right;
+  float: right;
 }
 
 #noun-chunk {

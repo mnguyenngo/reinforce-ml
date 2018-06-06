@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, Markup
+from flask import Flask, render_template, request, jsonify, Markup, redirect
 from scorer import Scorer
 from render_text import render_text
+from random import randint
 # import json
 
 app = Flask(__name__)
@@ -20,6 +21,16 @@ for sec in section_title:
 @app.route('/', methods=['GET'])
 def index():
     return render_template('app.html', data=directory_dict)
+
+
+@app.route('/random', methods=['GET'])
+def random_term():
+    total_num = len(scorer.nlp_data)
+    print(total_num)
+    x = randint(0, total_num)
+    word = scorer.nlp_data.loc[x, 'title']
+    print(word)
+    return redirect('/define/{}'.format(word))
 
 
 @app.route('/define/<word>', methods=['GET'])
@@ -54,13 +65,15 @@ def submit():
     show_score = render_template('score.html', data=score)
 
     leaderboard = scorer.nlp_data.loc[mask]['leaderboard'].values[0]
-    print(leaderboard)
     show_leaderboard = render_template('leaderboard.html', data=leaderboard)
+
+    next_step = render_template('next_step.html')
 
     return jsonify({'submission': submission,
                     'answer': answer,
                     'score': show_score,
-                    'leaderboard': show_leaderboard})
+                    'leaderboard': show_leaderboard,
+                    'next_step': next_step})
 
 
 if __name__ == '__main__':

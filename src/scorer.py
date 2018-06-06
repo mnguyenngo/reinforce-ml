@@ -71,7 +71,7 @@ class Scorer(object):
 
         total_score = sent_dist / sent_sim
 
-        self.adjust_leaderboard(word, user_subm, total_score)
+        self.adjust_leaderboard(word, user_subm, round(total_score, 3))
 
         score_dict = {
             "root_words": root_top_match,
