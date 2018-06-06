@@ -1,5 +1,6 @@
-# reinforce-ml
+# In Your Own Words
 Uses Wikipedia's Machine Learning Book as a resource to quiz and score user's input.
+Try the out the web app at http://iyow.com
 
 **See dev branch to contribute**
 
@@ -22,15 +23,10 @@ As an example:
 #### NLP
 * spaCy
 
-#### Database
-* SQL
-
 #### Deployment
 * Flask
 * AWS
 
-### URL
-Available at [101 Domain](https://www.101domain.com/domain-availability-search.htm) for $18.99
 
 ### Resources
 * [Book:Machine Learning – The Complete Guide - Wikipedia](https://en.wikipedia.org/wiki/Book:Machine_Learning_%E2%80%93_The_Complete_Guide)
