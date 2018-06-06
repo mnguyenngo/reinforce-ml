@@ -67,22 +67,31 @@ class Scorer(object):
         # get bonus multiword match score
         mw_score, mw_top_match = self.get_top_match(d_mw, u_mw)
 
-        print("root score: {}".format(root_score))
-        print("sentence similarity score: {}".format(sent_sim))
-        print("bonus score: {}".format(mw_score))
+        sent_dist = self.eucl_dist(u_doc.vector, d_doc.vector)
 
-        total_score = root_score * sent_sim + mw_score
+        total_score = sent_dist / sent_sim
 
-        print("total calculated score: {}".format(total_score))
+        self.adjust_leaderboard(word, user_subm, total_score)
 
         score_dict = {
             "root_words": root_top_match,
             "sent_sim": round(sent_sim, 3),
             "bonus": mw_top_match,
+            "sent_dist": round(sent_dist, 3),
             "total": round(total_score, 3)
         }
 
         return score_dict
+
+    def adjust_leaderboard(self, word, subm, score):
+        mask = self.nlp_data['title'] == word
+        idx = self.nlp_data[mask].index.values[0]
+        lb = self.nlp_data.loc[mask]['leaderboard'].values[0]
+
+        lb.append((subm, score))
+        lb = sorted(lb, key=lambda x: x[1])
+        lb = lb[:3]
+        self.nlp_data.loc[idx, 'leaderboard'] = lb
 
     def get_first_sent(self, doc):
         sents = list(doc.sents)
@@ -168,9 +177,7 @@ class Scorer(object):
             if len(top_match_words) > 3:
                 top_match_words = top_match_words[:3]
             top_match_words = [x[0] for x in top_match_words if x[1] > 0.75]
-            print(top_match_words)
             top_scores = top_matches.values()
-            print(top_scores)
             match_score = sum(top_scores) / len(top_scores)
             return match_score, top_match_words
         else:
@@ -182,3 +189,8 @@ class Scorer(object):
         return (np.sum((a_vec * b_vec))
                 / (np.sqrt(np.sum((a_vec ** 2)))
                    * np.sqrt(np.sum((b_vec ** 2)))))
+
+    def eucl_dist(self, a_vec, b_vec):
+        """Calculates and returns the cosine similarity value
+        """
+        return np.sqrt(np.sum(((a_vec-b_vec) ** 2)))

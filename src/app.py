@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 scorer = Scorer()
 baseurl = 'https://en.wikipedia.org'
-scorer.load_nlp_pickle('../data/180603_def_nlp.pkl')
+scorer.load_nlp_pickle('../data/180606_def_nlp.pkl')
 # json_data = json.loads(scorer.nlp_data.to_json(orient='index'))
 directory = scorer.nlp_data['title'].tolist()
 section_title = scorer.nlp_data['section'].unique()
@@ -15,8 +15,6 @@ directory_dict = {}
 for sec in section_title:
     mask = scorer.nlp_data['section'] == sec
     directory_dict[sec] = scorer.nlp_data[mask]['title'].values
-
-print(directory_dict)
 
 
 @app.route('/', methods=['GET'])
@@ -55,9 +53,14 @@ def submit():
                              data=Markup(annotate_def), url=url)
     show_score = render_template('score.html', data=score)
 
+    leaderboard = scorer.nlp_data.loc[mask]['leaderboard'].values[0]
+    print(leaderboard)
+    show_leaderboard = render_template('leaderboard.html', data=leaderboard)
+
     return jsonify({'submission': submission,
                     'answer': answer,
-                    'score': show_score})
+                    'score': show_score,
+                    'leaderboard': show_leaderboard})
 
 
 if __name__ == '__main__':

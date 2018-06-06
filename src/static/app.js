@@ -23,6 +23,8 @@ let display_results = function(results) {
     answer.html(results.answer)
     let score = $("div#score")
     score.html(results.score)
+    let leaderboard = $("div#leaderboard")
+    leaderboard.html(results.leaderboard)
 };
 
 $(document).ready(function() {

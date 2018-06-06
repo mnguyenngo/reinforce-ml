@@ -4,21 +4,13 @@
     Your Score
   </div>
   <div class="card-body">
-    <p>Total score: {{ data['total'] }}</p>
-    <p>Sentence similarity: {{ data['sent_sim'] }}</p>
-
-    <p>Matched root words:</p>
-    <ul>
-      {% for word in data['root_words'] %}
-        <li>{{ word }}</li>
-      {% endfor %}
-    </ul>
-
-    <p>Bonus:</p>
-    <ul>
-      {% for word in data['bonus'] %}
-        <li>{{ word }}</li>
-      {% endfor %}
-    </ul>
+    <h4 id="centered">{{ data['total'] }}</h4>
+    <!-- <ul>
+      <li>Sentence similarity: {{ data['sent_sim'] }}</li>
+      <li>Sentence distance: {{ data['sent_dist'] }}</li>
+    </ul> -->
+    <p id="centered">
+      <small>(lower is better)</small>
+    </p>
   </div>
 </div>
