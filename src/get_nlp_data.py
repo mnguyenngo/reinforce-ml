@@ -1,6 +1,7 @@
 import pandas as pd
 from scorer import Scorer
 import datetime as dt
+import numpy as np
 import re
 
 
@@ -12,6 +13,7 @@ def get_nlp_data(path):
     data['clean_def'] = data['definition'].apply(clean_def)
     data['nlp_doc'] = data['clean_def'].apply(
                         lambda x: add_nlp_doc(x, scorer))
+    data['leaderboard'] = np.empty((len(data), 0)).tolist()
 
     return data
 
@@ -38,3 +40,8 @@ def add_nlp_doc(definition, nlp_model):
         return nlp_model.nlp(definition)
     else:
         return None
+
+
+if __name__ == '__main__':
+    data = get_nlp_data('../data/180530_def.pkl')
+    pickle_nlp_data(data, '../data/')
