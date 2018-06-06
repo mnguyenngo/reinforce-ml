@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>IYOW</title>
+    <meta name="description" content="In Your Own Words">
+    <meta name="author" content="Nguyen Ngo">
+    <!-- load the jquery.js before the js for the app -->
+    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='js/bootstrap.min.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}>  </script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <h4 id="description-text centered">Daily workouts to reinforce machine learning concepts</h4>
+        <p>
+          Click on any of the terms below to start or try a <a href="/random">random term</a>.
+        </p>
+      </div>
+
+      <div class="row">
+        {% for sec in data %}
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card">
+              <div class="card-header">
+                {{ sec }}
+              </div>
+              <div class="card-body">
+                <ul>
+                  {% for title in data[sec] %}
+                    <li>
+                      <a href="/define/{{ title }}">
+                        {{ title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </body>
+</html>

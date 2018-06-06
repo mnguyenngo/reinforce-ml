@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>IYOW</title>
+    <meta name="description" content="In Your Own Words">
+    <meta name="author" content="Nguyen Ngo">
+    <!-- load the jquery.js before the js for the app -->
+    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='js/bootstrap.min.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}>  </script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
+    </nav>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-12">
+          <h4 id="centered">Define "<span id="word">{{ word }}</span>"</h4>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group" id="user-submission">
+            <textarea class="form-control" aria-label="With textarea" id="user-submission" name="user-submission" rows="4" cols="50" placeholder="Enter your definition here" wrap="soft"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-12" id="submit-button">
+          <button type="button" class="btn btn-primary btn-lg btn-block" id="submit">SUBMIT</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <a href="{{ url }}" id="centered">See answer</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div id="submission"></div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div id="answer"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div id="score"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div id="leaderboard"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div id="next_step"></div>
+        </div>
+      </div>
+
+    </div> <!-- end container -->
+
+  </body>
+</html>

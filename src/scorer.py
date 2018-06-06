@@ -23,11 +23,21 @@ class Scorer(object):
         else:
             self.nlp = spacy.load(nlp_model_name)
 
-    def load_pickle(self, path):
+    def load_raw_pickle(self, path):
         self.raw_data = pd.read_pickle(path)
 
-    def score(self, definition, user_subm):
-        """
+    def load_nlp_pickle(self, path):
+        self.nlp_data = pd.read_pickle(path)
+
+    def score(self, word, user_subm):
+        """Scores the user submission against the definition given by Wikipedia
+
+        Arguments:
+            word (str): the word that the user will attempt to define
+            user_subm (str): the definition given by the user
+
+        Return:
+            total_score (float): total calculated score
 
         Score is calculated by:
         top noun chunks that match / total num of noun chunks in the definition
@@ -38,7 +48,10 @@ class Scorer(object):
             num of multiword noun chunks that match / total num of multiword nc
         """
         u_doc = self.get_first_sent(self.nlp(user_subm))
-        d_doc = self.get_first_sent(self.nlp(definition))
+        # d_doc = self.get_first_sent(self.nlp(definition))
+        mask = self.nlp_data['title'] == word
+        d_doc = self.nlp_data.loc[mask]['nlp_doc'].values[0]
+        d_doc = self.get_first_sent(d_doc)
 
         d_roots = self.get_lemma_roots(d_doc)
         d_mw = self.get_mw_nc(d_doc)
@@ -47,23 +60,38 @@ class Scorer(object):
         u_mw = self.get_mw_nc(u_doc)
 
         # get root match score
-        root_score = self.get_top_match(d_roots, u_roots)
-
+        root_score, root_top_match = self.get_top_match(d_roots, u_roots)
         # get sentence similarity score
         sent_sim = self.cos_sim(u_doc.vector, d_doc.vector)
 
         # get bonus multiword match score
-        mw_score = self.get_top_match(d_mw, u_mw)
+        mw_score, mw_top_match = self.get_top_match(d_mw, u_mw)
 
-        print("root score: {}".format(root_score))
-        print("sentence similarity score: {}".format(sent_sim))
-        print("bonus score: {}".format(mw_score))
+        sent_dist = self.eucl_dist(u_doc.vector, d_doc.vector)
 
-        total_score = root_score * sent_sim + mw_score
+        total_score = sent_dist / sent_sim
 
-        print("total calculated score: {}".format(total_score))
+        self.adjust_leaderboard(word, user_subm, round(total_score, 3))
 
-        return total_score
+        score_dict = {
+            "root_words": root_top_match,
+            "sent_sim": round(sent_sim, 3),
+            "bonus": mw_top_match,
+            "sent_dist": round(sent_dist, 3),
+            "total": round(total_score, 3)
+        }
+
+        return score_dict
+
+    def adjust_leaderboard(self, word, subm, score):
+        mask = self.nlp_data['title'] == word
+        idx = self.nlp_data[mask].index.values[0]
+        lb = self.nlp_data.loc[mask]['leaderboard'].values[0]
+
+        lb.append((subm, score))
+        lb = sorted(lb, key=lambda x: x[1])
+        lb = lb[:3]
+        self.nlp_data.loc[idx, 'leaderboard'] = lb
 
     def get_first_sent(self, doc):
         sents = list(doc.sents)
@@ -111,19 +139,49 @@ class Scorer(object):
 
     def get_top_match(self, d_list, u_list):
         """Returns the scores for the matching items in two lists
+
+        Arguments:
+            d_list (list): list of words from definition
+            u_list (list): list of words from user submission
+
+        Key Variables:
+            a_list (list): shorter list of words
+            b_list (list): longer list of words
         """
+
         # get root match score
-        top_scores = []
-        for d_item in d_list:
-            d_item = self.nlp(d_item)
+        top_matches = {}
+        if len(d_list) < len(u_list):
+            a_list, b_list = d_list, u_list
+        else:
+            b_list, a_list = d_list, u_list
+
+        for a_item in a_list:
+            a_item = self.nlp(a_item)
             scores = []
-            for u_item in u_list:
-                u_item = self.nlp(u_item)
-                scores.append(self.cos_sim(u_item.vector, d_item.vector))
+            if len(b_list) > 0:
+                for idx, b_item in enumerate(b_list):
+                    b_item = self.nlp(b_item)
+                    scores.append(self.cos_sim(b_item.vector, a_item.vector))
+                    # replace nans with -1
+                    scores = ([score if ~np.isnan(score) else -1
+                              for score in scores])
+            if len(scores) > 0:
+                idx_of_top_match = scores.index(max(scores))
+                top_match_word = b_list.pop(idx_of_top_match)
+                top_matches[(a_item, top_match_word)] = max(scores)
 
-            top_scores.append(max(scores))
-
-        return sum(top_scores) / len(top_scores)
+        if len(top_matches) > 0:
+            top_match_words = sorted(top_matches.items(), key=lambda x: x[1],
+                                     reverse=True)
+            if len(top_match_words) > 3:
+                top_match_words = top_match_words[:3]
+            top_match_words = [x[0] for x in top_match_words if x[1] > 0.75]
+            top_scores = top_matches.values()
+            match_score = sum(top_scores) / len(top_scores)
+            return match_score, top_match_words
+        else:
+            return 0, None
 
     def cos_sim(self, a_vec, b_vec):
         """Calculates and returns the cosine similarity value
@@ -131,3 +189,8 @@ class Scorer(object):
         return (np.sum((a_vec * b_vec))
                 / (np.sqrt(np.sum((a_vec ** 2)))
                    * np.sqrt(np.sum((b_vec ** 2)))))
+
+    def eucl_dist(self, a_vec, b_vec):
+        """Calculates and returns the cosine similarity value
+        """
+        return np.sqrt(np.sum(((a_vec-b_vec) ** 2)))

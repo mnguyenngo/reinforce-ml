@@ -1,0 +1,40 @@
+#title-text {
+  padding: 10px;
+  font-family: 'Kaushan Script';
+}
+
+#description-text {
+  padding-left: 10px;
+}
+
+#centered {
+  text-align: center;
+  margin: auto;
+}
+
+#right {
+  text-align: right;
+  float: right;
+}
+
+#noun-chunk {
+  color: #ff1111;
+  font-weight: bolder;
+}
+
+#submit {
+  margin-bottom: 20px;
+}
+
+div.card {
+  margin: 5px;
+}
+
+div.card-header, div.card-body {
+  padding: .25rem 1.25rem;
+}
+
+span.right {
+  text-align: right;
+  float: right;
+}
