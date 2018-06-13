@@ -7,9 +7,9 @@
     <meta name="description" content="In Your Own Words">
     <meta name="author" content="Nguyen Ngo">
     <!-- load the jquery.js before the js for the app -->
-    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}></script>
     <script type="text/javascript" src={{ url_for('static', filename='js/bootstrap.min.js') }}> </script>
-    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}>  </script>
+    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
@@ -19,22 +19,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
-    <style>
-        .classWithPad {
-          margin: 20px;
-          padding: 20px;
-      }
-        .anyClass {
-        height:150px;
-        overflow-y: scroll;
-      }
-    </style>
   </head>
 
   <body>
     <!-- Introduction-->
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
+
+      <!-- GitHub Link -->
+      <span id="right">
+          <a href="https://github.com/mnguyenngo/reinforce-ml">
+            <i class="fa fa-github" style="font-size: 200%;"></i>
+          </a>
+      </span>
     </nav>
 
     <div class="container">
@@ -49,11 +46,11 @@
       <div class="row">
         {% for sec in data %}
           <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card anyClass">
+            <div class="card">
               <div class="card-header" style="font-size:20px">
                 {{ sec }}
               </div>
-              <div class="card-body">
+              <div class="card-body scroll-card">
                 <ul>
                   {% for title in data[sec] %}
                     <li>
@@ -68,13 +65,14 @@
           </div>
         {% endfor %}
       </div>
-      <!-- GitHub Button -->
-      <div class="row classWithPad align-middle">
-          <a href="https://github.com/mnguyenngo/reinforce-ml">
-            <i class="fa fa-github" style="font-size:24px"></i>
-          </a>
-          <p class="text-muted">  Learn more about the project</p>
+
+      <div class="row" style="margin: 30px">
+        <p id="centered">
+          NLP built with
+          <img src="static/img/spacy_logo.png" height="23" width="64" href="https://spacy.io/">
+        </p>
       </div>
+
     </div>
 
   </body>

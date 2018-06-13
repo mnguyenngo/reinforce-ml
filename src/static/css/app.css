@@ -9,12 +9,14 @@
 
 #centered {
   text-align: center;
+  /* padding: auto; */
   margin: auto;
 }
 
 #right {
   text-align: right;
   float: right;
+  display: inline;
 }
 
 #noun-chunk {
@@ -28,6 +30,11 @@
 
 div.card {
   margin: 5px;
+}
+
+div.scroll-card {
+  height: 200px;
+  overflow-y: scroll;
 }
 
 div.card-header, div.card-body {
