@@ -14,12 +14,25 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
 
-    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+    <!-- font-awesome -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+    <style>
+        .classWithPad {
+          margin: 20px;
+          padding: 20px;
+      }
+        .anyClass {
+        height:150px;
+        overflow-y: scroll;
+      }
+    </style>
   </head>
 
   <body>
-
+    <!-- Introduction-->
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
     </nav>
@@ -32,12 +45,12 @@
       <div class="row">
         <p>Click on any of the terms below to start or try a <a href="/random">random term</a>.</p>
       </div>
-
+      <!-- Term sections -->
       <div class="row">
         {% for sec in data %}
           <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-              <div class="card-header">
+            <div class="card anyClass">
+              <div class="card-header" style="font-size:20px">
                 {{ sec }}
               </div>
               <div class="card-body">
@@ -54,6 +67,13 @@
             </div>
           </div>
         {% endfor %}
+      </div>
+      <!-- GitHub Button -->
+      <div class="row classWithPad align-middle">
+          <a href="https://github.com/mnguyenngo/reinforce-ml">
+            <i class="fa fa-github" style="font-size:24px"></i>
+          </a>
+          <p class="text-muted">  Learn more about the project</p>
       </div>
     </div>
 
