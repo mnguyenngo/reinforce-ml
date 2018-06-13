@@ -37,6 +37,8 @@ As an example:
 To run this website on your own:
 
 `pip install spacey`
+
 `python -m spacy download en_core_web_lg`
+
 `python src/app.py`
 
