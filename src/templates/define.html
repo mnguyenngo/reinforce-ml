@@ -7,9 +7,9 @@
     <meta name="description" content="In Your Own Words">
     <meta name="author" content="Nguyen Ngo">
     <!-- load the jquery.js before the js for the app -->
-    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}> </script>
+    <script type="text/javascript" src={{ url_for('static', filename='jquery.js') }}></script>
     <script type="text/javascript" src={{ url_for('static', filename='js/bootstrap.min.js') }}> </script>
-    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}>  </script>
+    <script type="text/javascript" src={{ url_for('static', filename='app.js') }}></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
@@ -23,6 +23,13 @@
 
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand" id="centered" href="/"><h4 id="title-text">In Your Own Words</h4></a>
+
+      <!-- GitHub Link -->
+      <span id="right">
+          <a href="https://github.com/mnguyenngo/reinforce-ml">
+            <i class="fa fa-github" style="font-size: 200%;"></i>
+          </a>
+      </span>
     </nav>
 
     <div class="container">
@@ -80,6 +87,13 @@
           <div id="next_step"></div>
         </div>
       </div>
+
+      <!-- <div class="row" style="margin: 30px">
+        <p id="centered">
+          NLP built with
+          <img src="static/img/spacy_logo.png" height="23" width="64" href="https://spacy.io/">
+        </p>
+      </div> -->
 
     </div> <!-- end container -->
 
