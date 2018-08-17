@@ -1,6 +1,6 @@
 # In Your Own Words
 Uses Wikipedia's Machine Learning Book as a resource to quiz and score user's input.
-~~ Try the out the web app at http://iyow.xyz ~~
+~~Try the out the web app at [http://iyow.xyz](http://iyow.xyz).~~
 
 Try the out by cloning the repo and running `python app.py`
 
